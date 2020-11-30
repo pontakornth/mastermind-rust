@@ -44,14 +44,21 @@ impl Mastermind {
 pub fn play() {
     // This is for playing Mastermind
     let game = Mastermind::new(None);
-    println!("{}", game.solution);
+    // println!("{}", game.solution);
     let stdin = io::stdin();
     let mut guess = String::new();
     for _ in 1..6 {
-        match stdin.read_line(&mut guess) {
-            Ok(_) => println!("The guess is {}. Guess is {:?}", &guess, game.guess(&guess)),
-            Err(err) => println!("Error is {}", &err)
+        if let Ok(_) = stdin.read_line(&mut guess) {
+            let result = game.guess(&guess);
+            println!("Your guess is {} and answer is {:?}", &guess.trim(), &result);
+            if result == (4, 0) {
+                println!("Congratulations! You exist.");
+                break;
+            }
+        } else {
+            panic!("Input error")
         }
+        
         guess.clear();
     }
 }
