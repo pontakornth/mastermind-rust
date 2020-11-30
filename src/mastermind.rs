@@ -11,9 +11,9 @@ impl Mastermind {
         // TODO: Add guessing method
         let mut correct_pos = 0;
         let mut correct_char = 0;
-        let mut input_chs = input.chars();
-        for ch in self.solution.chars() {
-            let guess_ch = input_chs.nth(0).unwrap();
+        let input_chs: Vec<char> = input.chars().collect();
+        for (index, ch) in self.solution.char_indices() {
+            let guess_ch = input_chs[index];
             if guess_ch == ch {
                 correct_pos += 1;
             } else if input.contains(ch) {
@@ -44,12 +44,14 @@ impl Mastermind {
 pub fn play() {
     // This is for playing Mastermind
     let game = Mastermind::new(None);
+    println!("{}", game.solution);
     let stdin = io::stdin();
     let mut guess = String::new();
     for _ in 1..6 {
         match stdin.read_line(&mut guess) {
-            Ok(_) => println!("Guess is {:?}", game.guess(&guess)),
+            Ok(_) => println!("The guess is {}. Guess is {:?}", &guess, game.guess(&guess)),
             Err(err) => println!("Error is {}", &err)
         }
+        guess.clear();
     }
 }
