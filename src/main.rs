@@ -7,7 +7,7 @@ fn main() {
     println!("{:?}", mastermind::Mastermind::new(None));
     stdin.read_line(&mut command).unwrap();
     match command.trim() {
-        "play" => println!("Begins the game."),
+        "play" => mastermind::play(),
         "explain" => println!("Explanation goes brrrr."),
         _ => println!("Invalid command!"),
     }
