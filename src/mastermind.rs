@@ -41,6 +41,20 @@ impl Mastermind {
     }
 }
 
+fn str_hint(hint: (usize, usize)) -> String {
+    let mut output = String::new();
+    for _ in 0..hint.0 {
+        output.push('*');
+    }
+    for _ in 0..hint.1 {
+        output.push('o');
+    }
+    while output.chars().count() < 4 {
+        output.push('-');
+    }
+    output
+}
+
 pub fn play() {
     // This is for playing Mastermind
     let game = Mastermind::new(None);
@@ -50,7 +64,7 @@ pub fn play() {
     for _ in 1..6 {
         if let Ok(_) = stdin.read_line(&mut guess) {
             let result = game.guess(&guess);
-            println!("Your guess is {} and answer is {:?}", &guess.trim(), &result);
+            println!("Your guess is {} and answer is {}", &guess.trim(), str_hint(result));
             if result == (4, 0) {
                 println!("Congratulations! You exist.");
                 break;
