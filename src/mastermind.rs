@@ -4,14 +4,23 @@ use std::io;
 type Hint = (usize, usize);
 
 #[derive(Debug)]
+enum MastermindError {
+    OutOfRange
+}
+
+#[derive(Debug)]
 pub struct Mastermind {
     solution: String
 }
 
 impl Mastermind {
-    pub fn guess(&self, input: &str) -> Hint {
-        // TODO: Add guessing method
+    pub fn guess(&self, input: &str) -> Result<Hint,MastermindError> {
+        // TODO: Make this use result
         let input_chs: Vec<char> = input.chars().collect();
+        let solution_chs: Vec<char> = self.solution.chars().collect();
+        if input_chs.len() != solution_chs.len() {
+            return Err(MastermindError::OutOfRange)
+        }
         let mut correct_pos = 0;
         let mut correct_char = 0;
         for (index, ch) in self.solution.char_indices() {
@@ -23,7 +32,7 @@ impl Mastermind {
             }
 
         }
-        (correct_pos, correct_char)
+        Ok((correct_pos, correct_char))
     }
 
     pub fn new(input: Option<String>)  -> Mastermind {
@@ -43,7 +52,7 @@ impl Mastermind {
     }
 }
 
-fn str_hint(hint: (usize, usize)) -> String {
+fn str_hint(hint: Hint) -> String {
     let mut output = String::new();
     for _ in 0..hint.0 {
         output.push('*');
@@ -67,14 +76,20 @@ pub fn play() {
         if let Ok(_) = stdin.read_line(&mut guess) {
             guess = guess.trim().to_string();
             let result = game.guess(&guess);
-            println!("Your guess is {} and answer is {}", &guess, str_hint(result));
-            if result == (4, 0) {
-                println!("Congratulations! You exist.");
-                break;
+            match result {
+                Err(x) => println!("{:?}", x),
+                Ok(res) => {
+                println!("Your guess is {} and answer is {}", &guess, str_hint(res));
+                if res == (4, 0) {
+                    println!("Congratulations! You exist.");
+                    break;
+                }
             }
-        } else {
-            panic!("Input error")
+                
         }
+    } else {
+            panic!("Input error")
+    }
         
         guess.clear();
     }
