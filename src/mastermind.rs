@@ -1,17 +1,19 @@
 use rand::distributions::{Distribution, Uniform };
 use std::io;
 
+type Hint = (usize, usize);
+
 #[derive(Debug)]
 pub struct Mastermind {
     solution: String
 }
 
 impl Mastermind {
-    pub fn guess(&self, input: &str) -> (usize, usize) {
+    pub fn guess(&self, input: &str) -> Hint {
         // TODO: Add guessing method
+        let input_chs: Vec<char> = input.chars().collect();
         let mut correct_pos = 0;
         let mut correct_char = 0;
-        let input_chs: Vec<char> = input.chars().collect();
         for (index, ch) in self.solution.char_indices() {
             let guess_ch = input_chs[index];
             if guess_ch == ch {
@@ -63,8 +65,9 @@ pub fn play() {
     let mut guess = String::new();
     for _ in 1..6 {
         if let Ok(_) = stdin.read_line(&mut guess) {
+            guess = guess.trim().to_string();
             let result = game.guess(&guess);
-            println!("Your guess is {} and answer is {}", &guess.trim(), str_hint(result));
+            println!("Your guess is {} and answer is {}", &guess, str_hint(result));
             if result == (4, 0) {
                 println!("Congratulations! You exist.");
                 break;
