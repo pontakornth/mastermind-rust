@@ -73,6 +73,7 @@ pub fn play() {
     let stdin = io::stdin();
     let mut guess = String::new();
     for _ in 1..6 {
+        println!("Please input your guess.");
         if let Ok(_) = stdin.read_line(&mut guess) {
             guess = guess.trim().to_string();
             let result = game.guess(&guess);
